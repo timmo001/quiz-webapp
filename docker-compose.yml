@@ -16,6 +16,6 @@ services:
     environment:
       CERTIFICATES_DIR: /ssl
     ports:
-      - 3234:3234
+      - 8080:8080
     volumes:
       - ~/ssl:/ssl
