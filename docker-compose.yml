@@ -1,0 +1,21 @@
+---
+version: '3'
+
+services:
+  webapp:
+    image: quiz-webapp
+    build: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - 8234:443
+    volumes:
+      - ~/ssl:/ssl
+  ws:
+    image: timmo001/quiz-ws
+    environment:
+      CERTIFICATES_DIR: /ssl
+    ports:
+      - 3234:3234
+    volumes:
+      - ~/ssl:/ssl
