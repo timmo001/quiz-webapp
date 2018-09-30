@@ -38,7 +38,7 @@ class Questions extends React.Component {
   };
 
   render() {
-    const { classes, theme, questions } = this.props;
+    const { classes, theme, voice, questions } = this.props;
     const { showCard, questionNo, correctAnswers, incorrectAnswers } = this.state;
 
     return (
@@ -57,6 +57,7 @@ class Questions extends React.Component {
               <Question
                 theme={theme}
                 question={questions[questionNo]}
+                voice={voice}
                 handleNext={this.handleNext} />
             }
           </Slide>
@@ -70,6 +71,7 @@ Questions.propTypes = {
   classes: PropTypes.object.isRequired,
   themes: PropTypes.array.isRequired,
   theme: PropTypes.object.isRequired,
+  voice: PropTypes.object,
   questions: PropTypes.array.isRequired
 };
 
