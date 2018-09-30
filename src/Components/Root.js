@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Snackbar from '@material-ui/core/Snackbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Typography from '@material-ui/core/Typography'
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Slide from '@material-ui/core/Slide';
+import FormatPaint from '@material-ui/icons/FormatPaint';
 import normalizePort from './Common/normalizePort';
 import Categories from './Categories';
 import Questions from './Questions';
@@ -15,7 +21,7 @@ const styles = theme => ({
     width: '100%',
     maxHeight: '100%',
     maxWidth: '100%',
-    // background: theme.palette.backgrounds.main
+    background: theme.palette.background
   },
   center: {
     justifyContent: 'center',
@@ -28,16 +34,55 @@ const styles = theme => ({
   progress: {
     marginBottom: theme.spacing.unit
   },
+  buttons: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    [theme.breakpoints.down('xs')]: {
+      margin: 1
+    },
+    [theme.breakpoints.down('sm')]: {
+      margin: 4
+    }
+  },
+  button: {
+    height: 32,
+    width: 32,
+    color: theme.palette.text.light,
+    margin: 6,
+    [theme.breakpoints.down('sm')]: {
+      height: 26,
+      width: 26,
+      margin: 2,
+      gridColumn: 1
+    },
+    [theme.breakpoints.down('xs')]: {
+      margin: 1,
+    }
+  },
+  icon: {
+    height: 22,
+    width: 22,
+    [theme.breakpoints.down('sm')]: {
+      height: 18,
+      width: 18
+    },
+    transform: 'translateY(-8px)'
+  }
 });
 
 let ws;
 class Root extends Component {
   state = {
     snackMessage: { open: false, text: '' },
-    connected: false
+    connected: false,
+    anchorEl: null
   };
 
-  componentDidMount = () => this.connectToWS();
+  componentDidMount = () => {
+    this.setTheme();
+    this.connectToWS();
+  };
 
   connectToWS = () => {
     ws = new WebSocket(
@@ -73,44 +118,54 @@ class Root extends Component {
   setTheme = (themeId = undefined) => {
     if (!themeId && themeId !== 0)
       themeId = Number(localStorage.getItem('theme'));
-    if (!themeId && themeId !== 0)
-      themeId = -1;
-    if (themeId === -1) {
-      if (this.state.config.theme.auto) {
-        const state = this.state.entities.find(entity => {
-          return entity[0] === this.state.config.theme.auto.sensor
-        })[1].state;
-        this.props.setTheme(state <= this.state.config.theme.auto.below ? 2 : 1);
-      } else {
-        // theme from sunlight
-        const sun = this.state.entities.find(entity => {
-          return entity[0] === 'sun.sun'
-        });
-        if (sun)
-          this.props.setTheme(sun[1].state === 'below_horizon' ? 2 : 1);
-        else
-          this.props.setTheme(1);
-      }
-    } else
-      this.props.setTheme(themeId);
+    this.props.setTheme(themeId);
     localStorage.setItem('theme', themeId);
   };
 
   handleClose = () => this.setState({ snackMessage: { open: false, text: '' } });
 
-  handlePageChange = (page) => {
-    this.setState({ page }, () => {
-      this.getEntities(this.state.entities, page);
-    });
-  };
+  handleClick = event => this.setState({ anchorEl: event.currentTarget });
+
+  handleClose = (value) => this.setState({ anchorEl: null }, () => {
+    if (Number(value))
+      this.setTheme(value);
+  });
 
   render() {
     const { setTheme } = this;
     const { classes, themes, theme } = this.props;
-    const { snackMessage, connected, categories, questions } = this.state;
+    const { snackMessage, anchorEl, connected, categories, questions } = this.state;
 
     return (
       <div className={classes.root}>
+        <Slide in>
+          <div className={classes.buttons}>
+            <Tooltip title="Theme">
+              <IconButton
+                className={classes.button}
+                aria-label="Theme"
+                aria-owns={anchorEl ? 'simple-menu' : null}
+                aria-haspopup="true"
+                onClick={this.handleClick}>
+                <FormatPaint className={classes.icon} />
+              </IconButton>
+            </Tooltip>
+          </div>
+        </Slide>
+
+        <Menu
+          id="theme"
+          value={theme}
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={this.handleClose}>
+          {themes.map(theme => {
+            return (
+              <MenuItem key={theme.id} onClick={() => this.handleClose(theme.id)}>{theme.name}</MenuItem>
+            );
+          })}
+        </Menu>
+
         {questions ?
           <Questions
             themes={themes}

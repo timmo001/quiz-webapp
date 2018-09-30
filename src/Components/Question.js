@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import ArrowRight from '@material-ui/icons/ArrowRight';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -16,6 +16,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import shuffle from './Common/shuffle';
 
 const styles = theme => ({
+  card: {
+    background: theme.palette.card
+  },
   cardContent: {
     minHeight: 100,
     display: 'flex',
@@ -122,9 +125,14 @@ class Question extends React.Component {
         }
         <CardActions>
           <div className={classes.fill} />
-          <IconButton className={classes.button} onClick={this.handleNext}>
+          <Button
+            color="primary"
+            variant="fab"
+            className={classes.button}
+            disabled={answer === ''}
+            onClick={this.handleNext}>
             <ArrowRight />
-          </IconButton>
+          </Button>
           <div className={classes.fill} />
         </CardActions>
       </Card>

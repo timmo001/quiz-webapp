@@ -6,10 +6,10 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
+import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Slide from '@material-ui/core/Slide';
@@ -22,6 +22,9 @@ const styles = theme => ({
     paddingLeft: theme.spacing.unit * 2,
     paddingRight: theme.spacing.unit * 2,
     overflow: 'auto'
+  },
+  card: {
+    background: theme.palette.card
   },
   cardContent: {
     display: 'flex',
@@ -41,10 +44,8 @@ class Categories extends React.Component {
     category: '',
     difficulty: '',
     type: '',
-    amount: 15,
-  }
-
-  componentDidMount = () => this.props.setTheme();
+    amount: 15
+  };
 
   handleChange = event => this.setState({ [event.target.name]: event.target.value });
 
@@ -59,6 +60,7 @@ class Categories extends React.Component {
         container
         alignItems="center"
         justify="center">
+
         <Grid item lg={3} md={6} sm={6} xs={12}>
           <Slide in>
             <Card className={classes.card}>
@@ -150,6 +152,7 @@ class Categories extends React.Component {
                 <div className={classes.fill} />
                 <Button
                   className={classes.button}
+                  color="primary"
                   onClick={this.handlePlay}>
                   Play!
                 </Button>
@@ -157,15 +160,13 @@ class Categories extends React.Component {
             </Card>
           </Slide>
         </Grid>
-      </Grid>
+      </Grid >
     );
   }
 }
 
 Categories.propTypes = {
   classes: PropTypes.object.isRequired,
-  themes: PropTypes.array.isRequired,
-  theme: PropTypes.object.isRequired,
   categories: PropTypes.array.isRequired,
   setTheme: PropTypes.func.isRequired,
   handlePlay: PropTypes.func.isRequired

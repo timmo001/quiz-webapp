@@ -5,10 +5,13 @@ import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import Refresh from '@material-ui/icons/Refresh';
 
-const styles = () => ({
+const styles = theme => ({
+  card: {
+    background: theme.palette.card
+  },
   cardContent: {
     minHeight: 100,
     display: 'flex',
@@ -42,9 +45,9 @@ class End extends React.Component {
         </CardContent>
         <CardActions>
           <div className={classes.fill} />
-          <IconButton className={classes.button} onClick={this.handleRestart}>
+          <Button color="primary" variant="fab" className={classes.button} onClick={this.handleRestart}>
             <Refresh />
-          </IconButton>
+          </Button>
           <div className={classes.fill} />
         </CardActions>
       </Card>
