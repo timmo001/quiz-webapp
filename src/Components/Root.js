@@ -85,6 +85,7 @@ class Root extends Component {
     const storedVoiceName = localStorage.getItem('storedVoiceName');
     let voice
     if (storedVoiceName) voice = voices.find(v => v.name === storedVoiceName);
+    if (!voice) voice = voices.find(v => v.lang === 'en-GB');
     this.setState({ voices, voice });
   };
 
