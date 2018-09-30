@@ -13,3 +13,5 @@ const sessionStorageMock = {
 
 global.localStorage = localStorageMock;
 global.sessionStorage = sessionStorageMock;
+
+window.speechSynthesis.onvoiceschanged = jest.fn();
