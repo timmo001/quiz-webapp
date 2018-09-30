@@ -168,7 +168,7 @@ Categories.propTypes = {
   theme: PropTypes.object.isRequired,
   categories: PropTypes.array.isRequired,
   setTheme: PropTypes.func.isRequired,
-  handlePlay: PropTypes.func.isRequired,
+  handlePlay: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(Categories);

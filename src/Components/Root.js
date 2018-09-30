@@ -157,7 +157,7 @@ Root.propTypes = {
   themes: PropTypes.array.isRequired,
   theme: PropTypes.object.isRequired,
   addTheme: PropTypes.func.isRequired,
-  setTheme: PropTypes.func.isRequired,
+  setTheme: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(Root);

@@ -6,9 +6,9 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import Slide from '@material-ui/core/Slide';
 import ArrowRight from '@material-ui/icons/ArrowRight';
+import Question from './Question';
 
 const styles = theme => ({
   grid: {
@@ -33,8 +33,6 @@ const styles = theme => ({
 });
 
 class Categories extends React.Component {
-  state = {
-  }
 
   handleChange = event => this.setState({ [event.target.name]: event.target.value });
 
@@ -53,10 +51,13 @@ class Categories extends React.Component {
           <Slide in>
             <Card className={classes.card}>
               <CardContent className={classes.cardContent}>
-                <Typography variant="headline" align="center">
-                  {/* {questions[0].question} */}
-                </Typography>
-
+                {questions.map((question, x) => {
+                  return (
+                    <Question
+                      key={x}
+                      question={question} />
+                  );
+                })}
               </CardContent>
               <CardActions>
                 <div className={classes.fill} />
@@ -77,7 +78,7 @@ Categories.propTypes = {
   classes: PropTypes.object.isRequired,
   themes: PropTypes.array.isRequired,
   theme: PropTypes.object.isRequired,
-  questions: PropTypes.array.isRequired,
+  questions: PropTypes.array.isRequired
 };
 
 export default withStyles(styles)(Categories);
