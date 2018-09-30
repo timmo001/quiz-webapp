@@ -99,7 +99,7 @@ class Question extends React.Component {
             <Typography variant="title">
               {questionNo + 1}. {ReactHtmlParser(question.question)}
             </Typography>
-            <Typography variant="subheading">
+            <Typography variant="body2">
               {ReactHtmlParser(question.category)}
             </Typography>
 
