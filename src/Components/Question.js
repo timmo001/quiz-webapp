@@ -75,7 +75,9 @@ class Question extends React.Component {
     speechSynthesis.cancel();
     console.log(this.props.voice);
     this.speak(ReactHtmlParser(this.props.question.question));
-    this.state.answers.map(answer => this.speak(ReactHtmlParser(answer)));
+    this.state.answers.map(answer => {
+      return this.speak(ReactHtmlParser(answer));
+    });
   };
 
   handleChange = event => this.setState({ [event.target.name]: event.target.value });
