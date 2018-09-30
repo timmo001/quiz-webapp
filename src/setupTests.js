@@ -1,3 +1,5 @@
+import { WebSocket } from 'mock-socket';
+
 const localStorageMock = {
   getItem: jest.fn(),
   setItem: jest.fn(),
@@ -13,3 +15,7 @@ const sessionStorageMock = {
 
 global.localStorage = localStorageMock;
 global.sessionStorage = sessionStorageMock;
+
+window.speechSynthesis = { onvoiceschanged: jest.fn() };
+
+global.WebSocket = WebSocket;

@@ -43,6 +43,7 @@ const styles = theme => ({
   },
 });
 
+var speech;
 class Question extends React.Component {
   state = {
     answer: '',
@@ -63,20 +64,26 @@ class Question extends React.Component {
       shuffle([...this.props.question.incorrect_answers, this.props.question.correct_answer])
   }, () => this.playQuestion());
 
+  speak = (text) => {
+    speech = new SpeechSynthesisUtterance();
+    if (this.props.voice) speech.voice = this.props.voice;
+    speech.text = text;
+    speechSynthesis.speak(speech);
+  };
+
   playQuestion = () => {
-    window.speechSynthesis.cancel();
-    var msg = new SpeechSynthesisUtterance(ReactHtmlParser(this.props.question.question));
-    window.speechSynthesis.speak(msg);
-    this.state.answers.map((answer) => {
-      msg = new SpeechSynthesisUtterance(ReactHtmlParser(answer));
-      window.speechSynthesis.speak(msg);
+    speechSynthesis.cancel();
+    console.log(this.props.voice);
+    this.speak(ReactHtmlParser(this.props.question.question));
+    this.state.answers.map(answer => {
+      return this.speak(ReactHtmlParser(answer));
     });
   };
 
   handleChange = event => this.setState({ [event.target.name]: event.target.value });
 
   handleNext = () => this.setState({ showAnswer: true }, () => {
-    window.speechSynthesis.cancel();
+    speechSynthesis.cancel();
     setTimeout(() => this.setState({ showAnswer: false }, () => {
       this.props.handleNext(this.state.answer === this.props.question.correct_answer);
     }), 2000);
@@ -154,6 +161,7 @@ class Question extends React.Component {
 Question.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
+  voice: PropTypes.object,
   question: PropTypes.object.isRequired,
   handleNext: PropTypes.func.isRequired
 };
