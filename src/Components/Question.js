@@ -129,7 +129,7 @@ class Question extends React.Component {
             color="primary"
             variant="fab"
             className={classes.button}
-            disabled={answer === ''}
+            disabled={answer === '' || showAnswer}
             onClick={this.handleNext}>
             <ArrowRight />
           </Button>
