@@ -15,7 +15,7 @@ const styles = theme => ({
     width: '100%',
     maxHeight: '100%',
     maxWidth: '100%',
-    background: theme.palette.backgrounds.main
+    // background: theme.palette.backgrounds.main
   },
   center: {
     justifyContent: 'center',
@@ -156,7 +156,6 @@ Root.propTypes = {
   history: PropTypes.object.isRequired,
   themes: PropTypes.array.isRequired,
   theme: PropTypes.object.isRequired,
-  addTheme: PropTypes.func.isRequired,
   setTheme: PropTypes.func.isRequired
 };
 
