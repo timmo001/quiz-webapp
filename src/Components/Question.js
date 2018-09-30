@@ -61,11 +61,22 @@ class Question extends React.Component {
     answers: this.props.question.type === 'boolean' ?
       ['True', 'False'] :
       shuffle([...this.props.question.incorrect_answers, this.props.question.correct_answer])
-  });
+  }, () => this.playQuestion());
+
+  playQuestion = () => {
+    window.speechSynthesis.cancel();
+    var msg = new SpeechSynthesisUtterance(ReactHtmlParser(this.props.question.question));
+    window.speechSynthesis.speak(msg);
+    this.state.answers.map((answer) => {
+      msg = new SpeechSynthesisUtterance(ReactHtmlParser(answer));
+      window.speechSynthesis.speak(msg);
+    });
+  };
 
   handleChange = event => this.setState({ [event.target.name]: event.target.value });
 
   handleNext = () => this.setState({ showAnswer: true }, () => {
+    window.speechSynthesis.cancel();
     setTimeout(() => this.setState({ showAnswer: false }, () => {
       this.props.handleNext(this.state.answer === this.props.question.correct_answer);
     }), 2000);
