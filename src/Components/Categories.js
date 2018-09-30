@@ -152,10 +152,12 @@ class Categories extends React.Component {
                 <div className={classes.fill} />
                 <Button
                   className={classes.button}
+                  variant="raised"
                   color="primary"
                   onClick={this.handlePlay}>
-                  Play!
+                  Play
                 </Button>
+                <div className={classes.fill} />
               </CardActions>
             </Card>
           </Slide>
