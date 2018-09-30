@@ -89,7 +89,7 @@ class Question extends React.Component {
   });
 
   render() {
-    const { classes, theme, question } = this.props;
+    const { classes, theme, questionNo, question } = this.props;
     const { answers, answer, showAnswer } = this.state;
 
     return (
@@ -97,7 +97,7 @@ class Question extends React.Component {
         {question && answers ?
           <CardContent className={classes.cardContent}>
             <Typography variant="title">
-              {ReactHtmlParser(question.question)}
+              {questionNo + 1}. {ReactHtmlParser(question.question)}
             </Typography>
             <Typography variant="subheading">
               {ReactHtmlParser(question.category)}
@@ -164,6 +164,7 @@ Question.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
   voice: PropTypes.object,
+  questionNo: PropTypes.number.isRequired,
   question: PropTypes.object.isRequired,
   handleNext: PropTypes.func.isRequired
 };

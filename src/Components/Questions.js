@@ -56,6 +56,7 @@ class Questions extends React.Component {
               :
               <Question
                 theme={theme}
+                questionNo={questionNo}
                 question={questions[questionNo]}
                 voice={voice}
                 handleNext={this.handleNext} />
