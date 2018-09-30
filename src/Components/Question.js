@@ -73,7 +73,6 @@ class Question extends React.Component {
 
   playQuestion = () => {
     speechSynthesis.cancel();
-    console.log(this.props.voice);
     this.speak(ReactHtmlParser(this.props.question.question));
     this.state.answers.map(answer => {
       return this.speak(ReactHtmlParser(answer));
@@ -99,6 +98,9 @@ class Question extends React.Component {
           <CardContent className={classes.cardContent}>
             <Typography variant="title">
               {ReactHtmlParser(question.question)}
+            </Typography>
+            <Typography variant="subheading">
+              {ReactHtmlParser(question.category)}
             </Typography>
 
             <FormControl component="fieldset" className={classes.formControl}>
