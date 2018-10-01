@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Snackbar from '@material-ui/core/Snackbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -70,8 +69,7 @@ let ws;
 class Root extends Component {
   state = {
     snackMessage: { open: false, text: '' },
-    connected: false,
-    anchorEl: null
+    connected: false
   };
 
   componentDidMount = () => {
@@ -127,24 +125,22 @@ class Root extends Component {
     ws.send(JSON.stringify({ request: 'questions', amount, category, difficulty, type }));
   };
 
-  handleClose = () => this.setState({ snackMessage: { open: false, text: '' } });
-
   handleThemeClick = event => this.setState({ themeAnchorEl: event.currentTarget });
 
-  handleThemeClose = theme => theme && this.setState({ themeAnchorEl: null }, () => {
-    if (Number(theme)) this.setTheme(theme);
+  handleThemeClose = theme => this.setState({ themeAnchorEl: null }, () => {
+    if (theme && Number(theme)) this.setTheme(theme);
   });
 
   handleVoiceClick = event => this.setState({ voiceAnchorEl: event.currentTarget });
 
-  handleVoiceClose = voice => voice && this.setState({ voiceAnchorEl: null, voice }, () => {
+  handleVoiceClose = voice => this.setState({ voiceAnchorEl: null, voice: voice ? voice : this.state.voice }, () => {
     localStorage.setItem('storedVoiceName', this.state.voice.name);
   });
 
   render() {
     const { setTheme } = this;
     const { classes, themes, theme } = this.props;
-    const { snackMessage, voiceAnchorEl, themeAnchorEl, voices, voice, connected, categories, questions } = this.state;
+    const { voiceAnchorEl, themeAnchorEl, voices, voice, connected, categories, questions } = this.state;
 
     return (
       <div className={classes.root}>
@@ -179,7 +175,7 @@ class Root extends Component {
           className={classes.menu}
           anchorEl={voiceAnchorEl}
           open={Boolean(voiceAnchorEl)}
-          onClose={this.handleVoiceClose}>
+          onClose={() => this.handleVoiceClose(undefined)}>
           {voices && voices.map((voice, x) => {
             return (
               <MenuItem key={x} onClick={() => this.handleVoiceClose(voice)}>{voice.name}</MenuItem>
@@ -192,7 +188,7 @@ class Root extends Component {
           className={classes.menu}
           anchorEl={themeAnchorEl}
           open={Boolean(themeAnchorEl)}
-          onClose={this.handleThemeClose}>
+          onClose={() => this.handleThemeClose(undefined)}>
           {themes.map(theme => {
             return (
               <MenuItem key={theme.id} onClick={() => this.handleThemeClose(theme.id)}>{theme.name}</MenuItem>
@@ -227,14 +223,6 @@ class Root extends Component {
               }
             </div>
         }
-        <Snackbar
-          open={snackMessage.open}
-          autoHideDuration={2000}
-          onClose={this.handleClose}
-          onExited={this.handleExited}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-          ContentProps={{ 'aria-describedby': 'message-id' }}
-          message={<span id="message-id">{snackMessage.text}</span>} />
       </div>
     );
   }
