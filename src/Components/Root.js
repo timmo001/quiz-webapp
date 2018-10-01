@@ -22,7 +22,7 @@ const styles = theme => ({
     width: '100%',
     maxHeight: '100%',
     maxWidth: '100%',
-    background: theme.palette.background
+    background: theme.palette.mainBackground
   },
   center: {
     justifyContent: 'center',

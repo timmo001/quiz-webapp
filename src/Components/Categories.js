@@ -36,6 +36,9 @@ const styles = theme => ({
   },
   fill: {
     flexGrow: 1
+  },
+  menu: {
+    background: theme.palette.menu
   }
 });
 
@@ -79,7 +82,7 @@ class Categories extends React.Component {
                     input={<Input name="category" id="category" />}
                     displayEmpty
                     name="category"
-                    className={classes.selectEmpty}>
+                    MenuProps={{ MenuListProps: { className: classes.menu } }}>
                     <MenuItem value={''}>Any</MenuItem>
                     {categories.map((category, x) => {
                       return (
@@ -99,7 +102,7 @@ class Categories extends React.Component {
                     input={<Input name="difficulty" id="difficulty" />}
                     displayEmpty
                     name="difficulty"
-                    className={classes.selectEmpty}>
+                    MenuProps={{ MenuListProps: { className: classes.menu } }}>
                     <MenuItem value={''}>Any</MenuItem>
                     <MenuItem value={'easy'}>Easy</MenuItem>
                     <MenuItem value={'medium'}>Medium</MenuItem>
@@ -117,7 +120,7 @@ class Categories extends React.Component {
                     input={<Input name="type" id="type" />}
                     displayEmpty
                     name="type"
-                    className={classes.selectEmpty}>
+                    MenuProps={{ MenuListProps: { className: classes.menu } }}>
                     <MenuItem value={''}>Both</MenuItem>
                     <MenuItem value={'multiple'}>Multiple Choice</MenuItem>
                     <MenuItem value={'boolean'}>True / False</MenuItem>
@@ -134,7 +137,7 @@ class Categories extends React.Component {
                     input={<Input name="amount" id="amount" />}
                     displayEmpty
                     name="amount"
-                    className={classes.selectEmpty}>
+                    MenuProps={{ MenuListProps: { className: classes.menu } }}>
                     <MenuItem value={5}>5</MenuItem>
                     <MenuItem value={10}>10</MenuItem>
                     <MenuItem value={15}>15</MenuItem>
