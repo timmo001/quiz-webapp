@@ -93,7 +93,7 @@ class Question extends React.Component {
     const { answers, answer, showAnswer } = this.state;
 
     return (
-      <Card className={classes.card}>
+      <Card className={classes.card} elevation={2}>
         {question && answers ?
           <CardContent className={classes.cardContent}>
             <Typography variant="title">

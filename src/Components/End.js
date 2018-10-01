@@ -30,7 +30,7 @@ class End extends React.Component {
     const { classes, correctAnswers, incorrectAnswers } = this.props;
 
     return (
-      <Card className={classes.card}>
+      <Card className={classes.card} elevation={2}>
         <CardContent className={classes.cardContent}>
           <Typography variant="headline">
             End Game

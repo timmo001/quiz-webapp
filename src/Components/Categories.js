@@ -63,7 +63,7 @@ class Categories extends React.Component {
 
         <Grid item lg={3} md={6} sm={6} xs={12}>
           <Slide in>
-            <Card className={classes.card}>
+            <Card className={classes.card} elevation={2}>
               <CardContent className={classes.cardContent}>
                 <Typography variant="headline" align="center">
                   Welcome!
