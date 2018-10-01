@@ -14,6 +14,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import shuffle from './Common/shuffle';
+import correct from '../resources/correct.mp3';
+import incorrect from '../resources/incorrect.mp3';
 
 const styles = theme => ({
   card: {
@@ -83,6 +85,10 @@ class Question extends React.Component {
 
   handleNext = () => this.setState({ showAnswer: true }, () => {
     speechSynthesis.cancel();
+    if (this.state.answer === this.props.question.correct_answer)
+      new Audio(correct).play();
+    else
+      new Audio(incorrect).play();
     setTimeout(() => this.setState({ showAnswer: false }, () => {
       this.props.handleNext(this.state.answer === this.props.question.correct_answer);
     }), 2000);
