@@ -131,13 +131,13 @@ class Root extends Component {
 
   handleThemeClick = event => this.setState({ themeAnchorEl: event.currentTarget });
 
-  handleThemeClose = (value) => this.setState({ themeAnchorEl: null }, () => {
-    if (Number(value)) this.setTheme(value);
+  handleThemeClose = theme => theme && this.setState({ themeAnchorEl: null }, () => {
+    if (Number(theme)) this.setTheme(theme);
   });
 
   handleVoiceClick = event => this.setState({ voiceAnchorEl: event.currentTarget });
 
-  handleVoiceClose = (voice) => this.setState({ voiceAnchorEl: null, voice }, () => {
+  handleVoiceClose = voice => voice && this.setState({ voiceAnchorEl: null, voice }, () => {
     localStorage.setItem('storedVoiceName', this.state.voice.name);
   });
 
