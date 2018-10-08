@@ -97,7 +97,7 @@ class Root extends Component {
   connectToWS = () => {
     ws = new WebSocket(
       `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${
-      process.env.REACT_WS_URL || window.location.hostname}:${normalizePort(process.env.REACT_WS_PORT || '8080')}`
+      process.env.REACT_APP_WS_URL || window.location.hostname}:${normalizePort(process.env.REACT_APP_WS_PORT || '8080')}`
     );
 
     ws.onopen = () => {
