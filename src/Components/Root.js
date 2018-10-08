@@ -96,7 +96,8 @@ class Root extends Component {
 
   connectToWS = () => {
     ws = new WebSocket(
-      `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.hostname}:${normalizePort(process.env.PORT || '8080')}`
+      `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${
+      process.env.WS_URL || window.location.hostname}:${normalizePort(process.env.PORT || '8080')}`
     );
 
     ws.onopen = () => {
