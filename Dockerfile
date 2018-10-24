@@ -10,8 +10,6 @@ COPY . .
 # Install packages
 RUN \
     apk add --no-cache \
-     nodejs-current=9.11.1-r2 \
-     yarn=1.7.0-r0 \
      nginx=1.14.0-r1
 
 # Create nginx directories
@@ -39,10 +37,10 @@ LABEL \
     org.label-schema.build-date=${BUILD_DATE} \
     org.label-schema.name="Quiz Webapp" \
     org.label-schema.schema-version="1.0" \
-    org.label-schema.url="https://git.timmo.xyz/home-panel" \
-    org.label-schema.usage="https://github.com/timmo001/home-panel/tree/master/README.md" \
+    org.label-schema.url="https://git.timmo.xyz" \
+    org.label-schema.usage="https://github.com/timmo001/quiz-webapp/tree/master/README.md" \
     org.label-schema.vcs-ref=${BUILD_REF} \
-    org.label-schema.vcs-url="https://github.com/timmo001/home-panel" \
+    org.label-schema.vcs-url="https://github.com/timmo001/quiz-webapp" \
     org.label-schema.vendor="Timmo"
 
 # Set run CMD
