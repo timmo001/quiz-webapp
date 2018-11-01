@@ -5,7 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^3.3.2",
     "@material-ui/icons": "^3.0.1",
-    "@material-ui/lab": "^3.0.0-alpha.18",
+    "@material-ui/lab": "^3.0.0-alpha.22",
     "@mdi/font": "^2.8.94",
     "classnames": "^2.2.6",
     "is-plain-obj": "^1.1.0",
