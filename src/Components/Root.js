@@ -8,6 +8,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Slide from '@material-ui/core/Slide';
+import Paper from '@material-ui/core/Paper';
 import FormatPaint from '@material-ui/icons/FormatPaint';
 import RecordVoiceOver from '@material-ui/icons/RecordVoiceOver';
 import normalizePort from './Common/normalizePort';
@@ -62,6 +63,14 @@ const styles = theme => ({
   },
   menu: {
     marginTop: theme.spacing.unit * 6
+  },
+  session: {
+    position: 'absolute',
+    width: 150,
+    bottom: 0,
+    right: 0,
+    margin: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 2
   }
 });
 
@@ -104,6 +113,7 @@ class Root extends Component {
       console.log("WebSocket connected");
       this.setState({ connected: true });
       ws.send(JSON.stringify({ request: 'categories' }));
+      ws.send(JSON.stringify({ request: 'session' }));
     };
 
     ws.onmessage = (event) => {
@@ -117,6 +127,9 @@ class Root extends Component {
           break;
         case 'questions':
           this.setState({ questions: response.data });
+          break;
+        case 'session':
+          this.setState({ session: response.data });
           break;
       }
     };
@@ -141,7 +154,7 @@ class Root extends Component {
   render() {
     const { setTheme } = this;
     const { classes, themes, theme } = this.props;
-    const { voiceAnchorEl, themeAnchorEl, voices, voice, connected, categories, questions } = this.state;
+    const { voiceAnchorEl, themeAnchorEl, voices, voice, connected, categories, questions, session } = this.state;
 
     return (
       <div className={classes.root}>
@@ -224,6 +237,19 @@ class Root extends Component {
                 </Typography>
               }
             </div>
+        }
+
+        {session &&
+          <Slide in direction="up">
+            <Paper className={classes.session}>
+              <Typography variant="subheading">
+                Session ID
+              </Typography>
+              <Typography variant="headline" align="center">
+                {session.id}
+              </Typography>
+            </Paper>
+          </Slide>
         }
       </div>
     );
