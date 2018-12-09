@@ -3,15 +3,18 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Slide from '@material-ui/core/Slide';
-import Paper from '@material-ui/core/Paper';
+import Snackbar from '@material-ui/core/Snackbar';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 import FormatPaint from '@material-ui/icons/FormatPaint';
 import RecordVoiceOver from '@material-ui/icons/RecordVoiceOver';
 import normalizePort from './Common/normalizePort';
+import Join from './Join';
 import Categories from './Categories';
 import Questions from './Questions';
 
@@ -37,6 +40,7 @@ const styles = theme => ({
   },
   buttons: {
     position: 'absolute',
+    display: 'flex',
     top: 0,
     right: 0,
     margin: theme.spacing.unit * 2
@@ -65,13 +69,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 6
   },
   session: {
-    position: 'absolute',
-    width: 150,
-    bottom: 0,
-    right: 0,
-    margin: theme.spacing.unit * 2,
-    padding: theme.spacing.unit * 2,
-    background: theme.palette.card
+    background: theme.palette.card,
   }
 });
 
@@ -79,7 +77,8 @@ let ws;
 class Root extends Component {
   state = {
     snackMessage: { open: false, text: '' },
-    connected: false
+    connected: false,
+    joinOpen: false
   };
 
   componentDidMount = () => {
@@ -114,11 +113,11 @@ class Root extends Component {
       console.log("WebSocket connected");
       this.setState({ connected: true });
       ws.send(JSON.stringify({ request: 'categories' }));
-      ws.send(JSON.stringify({ request: 'session' }));
     };
 
     ws.onmessage = (event) => {
       const response = JSON.parse(event.data);
+      console.log(response);
       switch (response.request) {
         default:
           console.log(response);
@@ -130,14 +129,21 @@ class Root extends Component {
           this.setState({ questions: response.data });
           break;
         case 'session':
-          this.setState({ session: response.data });
+          // eslint-disable-next-line no-case-declarations
+          const { session, amount, category, difficulty, type } = response.data;
+          this.setState({ session });
+          ws.send(JSON.stringify({ request: 'questions', session, amount, category, difficulty, type }));
+          break;
+        case 'join':
+
+          this.setState({ session: response.data, joinOpen: false });
           break;
       }
     };
   };
 
   handleGetQuestions = (amount, category, difficulty, type) => {
-    ws.send(JSON.stringify({ request: 'questions', amount, category, difficulty, type }));
+    ws.send(JSON.stringify({ request: 'session', amount, category, difficulty, type }));
   };
 
   handleThemeClick = event => this.setState({ themeAnchorEl: event.currentTarget });
@@ -148,29 +154,38 @@ class Root extends Component {
 
   handleVoiceClick = event => this.setState({ voiceAnchorEl: event.currentTarget });
 
-  handleVoiceClose = voice => this.setState({ voiceAnchorEl: null, voice: voice ? voice : this.state.voice }, () => {
+  handleVoiceClose = voice => this.setState({
+    voiceAnchorEl: null, voice: voice ? voice : this.state.voice
+  }, () => {
     this.state.voice && localStorage.setItem('storedVoiceName', this.state.voice.name);
   });
+
+  handleJoinOpen = () => this.setState({ joinOpen: true });
+
+  handleJoin = id => ws.send(JSON.stringify({ request: 'join', id }));
 
   render() {
     const { setTheme } = this;
     const { classes, themes, theme } = this.props;
-    const { voiceAnchorEl, themeAnchorEl, voices, voice, connected, categories, questions, session } = this.state;
+    const { voiceAnchorEl, themeAnchorEl, voices, voice, connected,
+      categories, questions, session, joinOpen } = this.state;
 
     return (
       <div className={classes.root}>
         <Slide in>
           <div className={classes.buttons}>
             <Tooltip title="Voice">
-              <IconButton
-                className={classes.button}
-                aria-label="Voice"
-                aria-owns={voiceAnchorEl ? 'voice' : null}
-                aria-haspopup="true"
-                disabled={voices ? voices.length < 1 ? true : false : true}
-                onClick={this.handleVoiceClick}>
-                <RecordVoiceOver className={classes.icon} />
-              </IconButton>
+              <div>
+                <IconButton
+                  className={classes.button}
+                  aria-label="Voice"
+                  aria-owns={voiceAnchorEl ? 'voice' : null}
+                  aria-haspopup="true"
+                  disabled={voices ? voices.length < 1 ? true : false : true}
+                  onClick={this.handleVoiceClick}>
+                  <RecordVoiceOver className={classes.icon} />
+                </IconButton>
+              </div>
             </Tooltip>
             <Tooltip title="Theme">
               <IconButton
@@ -218,40 +233,53 @@ class Root extends Component {
             theme={theme}
             voice={voice}
             questions={questions} />
-          : categories ?
-            <Categories
-              themes={themes}
-              theme={theme}
-              voice={voice}
-              categories={categories}
-              setTheme={setTheme}
-              handlePlay={this.handleGetQuestions} />
-            :
-            <div className={classes.center}>
-              <CircularProgress className={classes.progress} />
-              {connected ?
+          : joinOpen ?
+            <Join
+              handleCancel={() => this.setState({ joinOpen: false })}
+              handleJoin={this.handleJoin} />
+            : categories ?
+              <Categories
+                themes={themes}
+                theme={theme}
+                voice={voice}
+                categories={categories}
+                setTheme={setTheme}
+                handlePlay={this.handleGetQuestions} />
+              :
+              <div className={classes.center}>
+                <CircularProgress className={classes.progress} />
+                {connected ?
+                  <Typography variant="subtitle1">
+                    Loading data..
+                </Typography>
+                  :
+                  <Typography variant="subtitle1">
+                    Attempting to connect..
+                </Typography>
+                }
+              </div>
+        }
+
+        {!joinOpen &&
+          <Snackbar open anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+            <SnackbarContent
+              className={classes.session}
+              message={session ?
                 <Typography variant="subtitle1">
-                  Loading data..
+                  Session ID: {session}
                 </Typography>
                 :
                 <Typography variant="subtitle1">
-                  Attempting to connect..
+                  Join another session
                 </Typography>
               }
-            </div>
-        }
-
-        {session &&
-          <Slide in direction="up">
-            <Paper className={classes.session}>
-              <Typography variant="subheading">
-                Session ID
-              </Typography>
-              <Typography variant="headline" align="center">
-                {session.id}
-              </Typography>
-            </Paper>
-          </Slide>
+              action={!session &&
+                <Button color="primary" align="center" onClick={this.handleJoinOpen}>
+                  Join
+                </Button>
+              }
+            />
+          </Snackbar>
         }
       </div>
     );

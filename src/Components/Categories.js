@@ -17,10 +17,7 @@ import Slide from '@material-ui/core/Slide';
 const styles = theme => ({
   grid: {
     height: '100%',
-    paddingTop: theme.spacing.unit * 8,
-    paddingBottom: theme.spacing.unit * 2,
-    paddingLeft: theme.spacing.unit * 2,
-    paddingRight: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 2,
     overflow: 'auto'
   },
   card: {
@@ -165,7 +162,7 @@ class Categories extends React.Component {
             </Card>
           </Slide>
         </Grid>
-      </Grid >
+      </Grid>
     );
   }
 }

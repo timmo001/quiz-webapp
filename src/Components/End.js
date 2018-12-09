@@ -49,8 +49,8 @@ class End extends React.Component {
             End Game
           </Typography>
           <Typography variant="subtitle1">
-            Thats it. You got {this.props.correctAnswers.length} out of {
-              this.props.correctAnswers.length + this.props.incorrectAnswers.length
+            Thats it. You got {correctAnswers.length} out of {
+              correctAnswers.length + incorrectAnswers.length
             }. Thanks for playing!
           </Typography>
         </CardContent>
