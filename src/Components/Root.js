@@ -70,7 +70,8 @@ const styles = theme => ({
     bottom: 0,
     right: 0,
     margin: theme.spacing.unit * 2,
-    padding: theme.spacing.unit * 2
+    padding: theme.spacing.unit * 2,
+    background: theme.palette.card
   }
 });
 
