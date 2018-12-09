@@ -89,9 +89,9 @@ class Root extends Component {
   };
 
   getTTS = () => window.speechSynthesis.onvoiceschanged = () => {
-    const voices = window.speechSynthesis.getVoices();
+    const voices = window.speechSynthesis.getVoices().filter(v => v.lang.startsWith('en'));
     const storedVoiceName = localStorage.getItem('storedVoiceName');
-    let voice
+    let voice;
     if (storedVoiceName) voice = voices.find(v => v.name === storedVoiceName);
     if (!voice) voice = voices.find(v => v.lang === 'en-GB');
     this.setState({ voices, voice });
