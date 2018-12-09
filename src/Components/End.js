@@ -45,16 +45,14 @@ class End extends React.Component {
     return (
       <Card className={classes.card} elevation={2}>
         <CardContent className={classes.cardContent}>
-          <Typography variant="h5">
+          <Typography variant="h5" gutterBottom>
             End Game
           </Typography>
           <Typography variant="subtitle1">
-            Correct: {correctAnswers.length}
+            Thats it. You got {this.props.correctAnswers.length} out of {
+              this.props.correctAnswers.length + this.props.incorrectAnswers.length
+            }. Thanks for playing!
           </Typography>
-          <Typography variant="subtitle1">
-            Incorrect: {incorrectAnswers.length}
-          </Typography>
-
         </CardContent>
         <CardActions>
           <div className={classes.fill} />
