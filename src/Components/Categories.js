@@ -42,21 +42,12 @@ const styles = theme => ({
   }
 });
 
-var speech;
 class Categories extends React.Component {
   state = {
     category: '',
     difficulty: '',
     type: '',
     amount: 15
-  };
-
-  componentDidMount = () => {
-    speechSynthesis.cancel();
-    speech = new SpeechSynthesisUtterance();
-    if (this.props.voice) speech.voice = this.props.voice;
-    speech.text = 'Welcome!';
-    speechSynthesis.speak(speech);
   };
 
   handleChange = event => this.setState({ [event.target.name]: event.target.value });
