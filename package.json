@@ -3,19 +3,19 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^3.6.0",
+    "@material-ui/core": "^3.6.1",
     "@material-ui/icons": "^3.0.1",
     "@material-ui/lab": "^3.0.0-alpha.24",
-    "@mdi/font": "^3.0.39",
+    "@mdi/font": "^3.2.89",
     "classnames": "^2.2.6",
     "is-plain-obj": "^1.1.0",
     "mock-socket": "^8.0.5",
     "prop-types": "^15.6.2",
-    "react": "^16.6.0",
-    "react-dom": "^16.6.0",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
     "react-html-parser": "^2.0.2",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "^1.1.5",
+    "react-scripts": "^2.1.1",
     "typeface-roboto": "^0.0.54"
   },
   "scripts": {
@@ -25,7 +25,7 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "eslint": "^5.9.0",
+    "eslint": "^5.10.0",
     "eslint-plugin-react": "^7.11.1"
   }
 }
