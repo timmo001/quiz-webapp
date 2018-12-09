@@ -126,7 +126,8 @@ class Root extends Component {
           this.setState({ categories: response.data });
           break;
         case 'questions':
-          this.setState({ questions: response.data });
+          if (response.session === this.state.session)
+            this.setState({ questions: response.data });
           break;
         case 'session':
           // eslint-disable-next-line no-case-declarations
@@ -135,7 +136,6 @@ class Root extends Component {
           ws.send(JSON.stringify({ request: 'questions', session, amount, category, difficulty, type }));
           break;
         case 'join':
-
           this.setState({ session: response.data, joinOpen: false });
           break;
       }
