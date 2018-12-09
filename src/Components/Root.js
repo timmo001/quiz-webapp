@@ -78,7 +78,10 @@ class Root extends Component {
   state = {
     snackMessage: { open: false, text: '' },
     connected: false,
-    joinOpen: false
+    joinOpen: false,
+    host: false,
+    waiting: true,
+    players: 1
   };
 
   componentDidMount = () => {
@@ -117,7 +120,6 @@ class Root extends Component {
 
     ws.onmessage = (event) => {
       const response = JSON.parse(event.data);
-      console.log(response);
       switch (response.request) {
         default:
           console.log(response);
@@ -125,24 +127,31 @@ class Root extends Component {
         case 'categories':
           this.setState({ categories: response.data });
           break;
-        case 'questions':
-          if (response.session === this.state.session)
-            this.setState({ questions: response.data });
-          break;
         case 'session':
-          // eslint-disable-next-line no-case-declarations
-          const { session, amount, category, difficulty, type } = response.data;
-          this.setState({ session });
-          ws.send(JSON.stringify({ request: 'questions', session, amount, category, difficulty, type }));
+          this.setState({
+            session: response.data.session,
+            questions: response.data.questions,
+            host: true
+          });
           break;
         case 'join':
-          this.setState({ session: response.data, joinOpen: false });
+          if (response.session === this.state.session)
+            this.setState({
+              questions: response.data.questions,
+              players: this.state.players + 1,
+              joinOpen: false
+            });
+          break;
+        case 'ready':
+          if (response.session === this.state.session)
+            this.setState({ waiting: false });
           break;
       }
     };
   };
 
   handleGetQuestions = (amount, category, difficulty, type) => {
+    console.log('handleGetQuestions', amount, category, difficulty, type);
     ws.send(JSON.stringify({ request: 'session', amount, category, difficulty, type }));
   };
 
@@ -162,13 +171,17 @@ class Root extends Component {
 
   handleJoinOpen = () => this.setState({ joinOpen: true });
 
-  handleJoin = id => ws.send(JSON.stringify({ request: 'join', id }));
+  handleJoin = session => this.setState({ session }, () =>
+    ws.send(JSON.stringify({ request: 'join', session })));
+
+  handleReady = () =>
+    ws.send(JSON.stringify({ request: 'ready', session: this.state.session }));
 
   render() {
     const { setTheme } = this;
     const { classes, themes, theme } = this.props;
-    const { voiceAnchorEl, themeAnchorEl, voices, voice, connected,
-      categories, questions, session, joinOpen } = this.state;
+    const { voiceAnchorEl, themeAnchorEl, voices, voice, connected, categories,
+      questions, session, joinOpen, host, players, waiting } = this.state;
 
     return (
       <div className={classes.root}>
@@ -232,6 +245,10 @@ class Root extends Component {
             themes={themes}
             theme={theme}
             voice={voice}
+            host={host}
+            players={players}
+            waiting={waiting}
+            handleReady={this.handleReady}
             questions={questions} />
           : joinOpen ?
             <Join
@@ -251,11 +268,11 @@ class Root extends Component {
                 {connected ?
                   <Typography variant="subtitle1">
                     Loading data..
-                </Typography>
+                  </Typography>
                   :
                   <Typography variant="subtitle1">
                     Attempting to connect..
-                </Typography>
+                  </Typography>
                 }
               </div>
         }
@@ -270,7 +287,7 @@ class Root extends Component {
                 </Typography>
                 :
                 <Typography variant="subtitle1">
-                  Join another session
+                  Join another game
                 </Typography>
               }
               action={!session &&

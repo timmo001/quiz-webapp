@@ -23,7 +23,7 @@ const styles = theme => ({
     minHeight: 100,
     display: 'flex',
     flexDirection: 'column'
-  },
+  }
 });
 
 class Join extends Component {
@@ -32,10 +32,10 @@ class Join extends Component {
     id: '',
   };
 
-  handleChange = event => this.setState({ id: event.target.value });
+  handleChange = event => this.setState({ id: event.target.value.toUpperCase() });
 
   render() {
-    const { classes,handleCancel, handleJoin } = this.props;
+    const { classes, handleCancel, handleJoin } = this.props;
     const { id } = this.state;
     return (
       <Grid
@@ -49,14 +49,18 @@ class Join extends Component {
             <Card className={classes.card} elevation={2}>
               <CardContent className={classes.cardContent}>
                 <Typography variant="h5" gutterBottom>
-                  Join Session
+                  Join Game
                 </Typography>
                 <TextField
+                  className={classes.input}
                   autoFocus
                   margin="dense"
                   id="id"
                   label="Session ID"
                   type="text"
+                  inputProps={{
+                    autoCapitalize: 'characters'
+                  }}
                   value={id}
                   onChange={this.handleChange}
                   fullWidth />
