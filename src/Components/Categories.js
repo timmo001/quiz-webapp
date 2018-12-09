@@ -47,7 +47,7 @@ class Categories extends React.Component {
     category: '',
     difficulty: '',
     type: '',
-    amount: 15
+    amount: 5
   };
 
   handleChange = event => this.setState({ [event.target.name]: event.target.value });
@@ -68,7 +68,7 @@ class Categories extends React.Component {
           <Slide in>
             <Card className={classes.card} elevation={2}>
               <CardContent className={classes.cardContent} component="form">
-                <Typography variant="headline" align="center">
+                <Typography variant="headline" align="center" gutterBottom>
                   Welcome!
                 </Typography>
 
