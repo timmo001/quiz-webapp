@@ -102,10 +102,10 @@ class Question extends React.Component {
       <Card className={classes.card} elevation={2}>
         {question && answers ?
           <CardContent className={classes.cardContent}>
-            <Typography variant="title">
+            <Typography variant="h6">
               {questionNo + 1}. {ReactHtmlParser(question.question)}
             </Typography>
-            <Typography variant="body2">
+            <Typography variant="body1">
               {ReactHtmlParser(question.category)}
             </Typography>
 
@@ -143,7 +143,7 @@ class Question extends React.Component {
           <CardContent className={classes.cardContent}>
             <div className={classes.center}>
               <CircularProgress className={classes.progress} />
-              <Typography variant="subheading">
+              <Typography variant="subtitle1">
                 Loading..
               </Typography>
             </div>

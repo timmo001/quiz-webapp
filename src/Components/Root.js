@@ -215,11 +215,11 @@ class Root extends Component {
             <div className={classes.center}>
               <CircularProgress className={classes.progress} />
               {connected ?
-                <Typography variant="subheading">
+                <Typography variant="subtitle1">
                   Loading data..
                 </Typography>
                 :
-                <Typography variant="subheading">
+                <Typography variant="subtitle1">
                   Attempting to connect..
                 </Typography>
               }

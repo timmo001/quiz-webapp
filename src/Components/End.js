@@ -32,13 +32,13 @@ class End extends React.Component {
     return (
       <Card className={classes.card} elevation={2}>
         <CardContent className={classes.cardContent}>
-          <Typography variant="headline">
+          <Typography variant="h5">
             End Game
           </Typography>
-          <Typography variant="subheading">
+          <Typography variant="subtitle1">
             Correct: {correctAnswers.length}
           </Typography>
-          <Typography variant="subheading">
+          <Typography variant="subtitle1">
             Incorrect: {incorrectAnswers.length}
           </Typography>
 
