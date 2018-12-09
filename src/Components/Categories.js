@@ -42,12 +42,21 @@ const styles = theme => ({
   }
 });
 
+var speech;
 class Categories extends React.Component {
   state = {
     category: '',
     difficulty: '',
     type: '',
     amount: 15
+  };
+
+  componentDidMount = () => {
+    speechSynthesis.cancel();
+    speech = new SpeechSynthesisUtterance();
+    if (this.props.voice) speech.voice = this.props.voice;
+    speech.text = 'Welcome!';
+    speechSynthesis.speak(speech);
   };
 
   handleChange = event => this.setState({ [event.target.name]: event.target.value });
@@ -174,7 +183,8 @@ Categories.propTypes = {
   classes: PropTypes.object.isRequired,
   categories: PropTypes.array.isRequired,
   setTheme: PropTypes.func.isRequired,
-  handlePlay: PropTypes.func.isRequired
+  handlePlay: PropTypes.func.isRequired,
+  voice: PropTypes.object
 };
 
 export default withStyles(styles)(Categories);

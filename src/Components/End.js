@@ -45,7 +45,7 @@ class End extends React.Component {
         </CardContent>
         <CardActions>
           <div className={classes.fill} />
-          <Fab mini color="primary" className={classes.button} onClick={this.handleRestart}>
+          <Fab color="primary" className={classes.button} onClick={this.handleRestart}>
             <Refresh />
           </Fab>
           <div className={classes.fill} />

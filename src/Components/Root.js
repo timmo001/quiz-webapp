@@ -207,6 +207,7 @@ class Root extends Component {
             <Categories
               themes={themes}
               theme={theme}
+              voice={voice}
               categories={categories}
               setTheme={setTheme}
               handlePlay={this.handleGetQuestions} />
