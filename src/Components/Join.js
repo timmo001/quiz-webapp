@@ -23,6 +23,9 @@ const styles = theme => ({
     minHeight: 100,
     display: 'flex',
     flexDirection: 'column'
+  },
+  fill: {
+    flexGrow: 1
   }
 });
 
@@ -59,10 +62,12 @@ class Join extends Component {
                   label="Session ID"
                   type="text"
                   inputProps={{
-                    autoCapitalize: 'characters'
+                    autoCapitalize: 'characters',
                   }}
+                  autoComplete="off"
                   value={id}
                   onChange={this.handleChange}
+                  onKeyPress={e => e.key === 'Enter' && handleJoin(id)}
                   fullWidth />
               </CardContent>
               <CardActions>
@@ -73,7 +78,6 @@ class Join extends Component {
                 <Button color="primary" onClick={() => handleJoin(id)}>
                   Join
                 </Button>
-                <div className={classes.fill} />
               </CardActions>
             </Card>
           </Slide>

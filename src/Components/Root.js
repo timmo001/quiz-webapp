@@ -113,7 +113,7 @@ class Root extends Component {
     );
 
     ws.onopen = () => {
-      console.log("WebSocket connected");
+      console.log('WebSocket connected');
       this.setState({ connected: true });
       ws.send(JSON.stringify({ request: 'categories' }));
     };
@@ -151,7 +151,6 @@ class Root extends Component {
   };
 
   handleGetQuestions = (amount, category, difficulty, type) => {
-    console.log('handleGetQuestions', amount, category, difficulty, type);
     ws.send(JSON.stringify({ request: 'session', amount, category, difficulty, type }));
   };
 
