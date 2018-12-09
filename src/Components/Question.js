@@ -67,10 +67,12 @@ class Question extends React.Component {
   }, () => this.playQuestion());
 
   speak = (text) => {
-    speech = new SpeechSynthesisUtterance();
-    if (this.props.voice) speech.voice = this.props.voice;
-    speech.text = text;
-    speechSynthesis.speak(speech);
+    if (this.props.voice) {
+      speech = new SpeechSynthesisUtterance();
+      speech.voice = this.props.voice;
+      speech.text = text;
+      speechSynthesis.speak(speech);
+    }
   };
 
   playQuestion = () => {

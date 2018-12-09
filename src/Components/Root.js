@@ -149,7 +149,7 @@ class Root extends Component {
   handleVoiceClick = event => this.setState({ voiceAnchorEl: event.currentTarget });
 
   handleVoiceClose = voice => this.setState({ voiceAnchorEl: null, voice: voice ? voice : this.state.voice }, () => {
-    localStorage.setItem('storedVoiceName', this.state.voice.name);
+    this.state.voice && localStorage.setItem('storedVoiceName', this.state.voice.name);
   });
 
   render() {
@@ -167,6 +167,7 @@ class Root extends Component {
                 aria-label="Voice"
                 aria-owns={voiceAnchorEl ? 'voice' : null}
                 aria-haspopup="true"
+                disabled={voices ? voices.length < 1 ? true : false : true}
                 onClick={this.handleVoiceClick}>
                 <RecordVoiceOver className={classes.icon} />
               </IconButton>

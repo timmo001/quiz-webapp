@@ -27,12 +27,14 @@ class End extends React.Component {
 
   componentDidMount = () => {
     speechSynthesis.cancel();
-    speech = new SpeechSynthesisUtterance();
-    if (this.props.voice) speech.voice = this.props.voice;
-    speech.text = `Thats it. You got ${this.props.correctAnswers.length} out of ${
-      this.props.correctAnswers.length + this.props.incorrectAnswers.length
-      }. Thanks for playing!`;
-    speechSynthesis.speak(speech);
+    if (this.props.voice) {
+      speech = new SpeechSynthesisUtterance();
+      speech.voice = this.props.voice;
+      speech.text = `Thats it. You got ${this.props.correctAnswers.length} out of ${
+        this.props.correctAnswers.length + this.props.incorrectAnswers.length
+        }. Thanks for playing!`;
+      speechSynthesis.speak(speech);
+    }
   };
 
   handleRestart = () => window.location.reload(true);
