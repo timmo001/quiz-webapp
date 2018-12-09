@@ -155,7 +155,7 @@ class Categories extends React.Component {
                 <div className={classes.fill} />
                 <Button
                   className={classes.button}
-                  variant="raised"
+                  variant="contained"
                   color="primary"
                   onClick={this.handlePlay}>
                   Play

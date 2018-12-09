@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
 import Refresh from '@material-ui/icons/Refresh';
 
 const styles = theme => ({
@@ -45,9 +45,9 @@ class End extends React.Component {
         </CardContent>
         <CardActions>
           <div className={classes.fill} />
-          <Button color="primary" variant="fab" className={classes.button} onClick={this.handleRestart}>
+          <Fab mini color="primary" className={classes.button} onClick={this.handleRestart}>
             <Refresh />
-          </Button>
+          </Fab>
           <div className={classes.fill} />
         </CardActions>
       </Card>
