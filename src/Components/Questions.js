@@ -51,6 +51,7 @@ class Questions extends React.Component {
           <Slide in={showCard}>
             {questionNo === questions.length ?
               <End
+                voice={voice}
                 correctAnswers={correctAnswers}
                 incorrectAnswers={incorrectAnswers} />
               :

@@ -22,7 +22,18 @@ const styles = theme => ({
   }
 });
 
+var speech;
 class End extends React.Component {
+
+  componentDidMount = () => {
+    speechSynthesis.cancel();
+    speech = new SpeechSynthesisUtterance();
+    if (this.props.voice) speech.voice = this.props.voice;
+    speech.text = `Thats it. You got ${this.props.correctAnswers.length} out of ${
+      this.props.correctAnswers.length + this.props.incorrectAnswers.length
+      }. Thanks for playing!`;
+    speechSynthesis.speak(speech);
+  };
 
   handleRestart = () => window.location.reload(true);
 
@@ -58,7 +69,8 @@ class End extends React.Component {
 End.propTypes = {
   classes: PropTypes.object.isRequired,
   correctAnswers: PropTypes.array.isRequired,
-  incorrectAnswers: PropTypes.array.isRequired
+  incorrectAnswers: PropTypes.array.isRequired,
+  voice: PropTypes.object
 };
 
 export default withStyles(styles)(End);
