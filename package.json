@@ -6,7 +6,7 @@
     "@material-ui/core": "^3.7.0",
     "@material-ui/icons": "^3.0.1",
     "@material-ui/lab": "^3.0.0-alpha.26",
-    "@mdi/font": "^3.2.89",
+    "@mdi/font": "^3.3.92",
     "classnames": "^2.2.6",
     "is-plain-obj": "^1.1.0",
     "mock-socket": "^8.0.5",
