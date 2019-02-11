@@ -3,14 +3,18 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Slide from '@material-ui/core/Slide';
+import Snackbar from '@material-ui/core/Snackbar';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 import FormatPaint from '@material-ui/icons/FormatPaint';
 import RecordVoiceOver from '@material-ui/icons/RecordVoiceOver';
 import normalizePort from './Common/normalizePort';
+import Join from './Join';
 import Categories from './Categories';
 import Questions from './Questions';
 
@@ -36,6 +40,7 @@ const styles = theme => ({
   },
   buttons: {
     position: 'absolute',
+    display: 'flex',
     top: 0,
     right: 0,
     margin: theme.spacing.unit * 2
@@ -62,6 +67,9 @@ const styles = theme => ({
   },
   menu: {
     marginTop: theme.spacing.unit * 6
+  },
+  session: {
+    background: theme.palette.card,
   }
 });
 
@@ -69,7 +77,11 @@ let ws;
 class Root extends Component {
   state = {
     snackMessage: { open: false, text: '' },
-    connected: false
+    connected: false,
+    joinOpen: false,
+    host: false,
+    waiting: true,
+    players: 1
   };
 
   componentDidMount = () => {
@@ -79,9 +91,9 @@ class Root extends Component {
   };
 
   getTTS = () => window.speechSynthesis.onvoiceschanged = () => {
-    const voices = window.speechSynthesis.getVoices();
+    const voices = window.speechSynthesis.getVoices().filter(v => v.lang.startsWith('en'));
     const storedVoiceName = localStorage.getItem('storedVoiceName');
-    let voice
+    let voice;
     if (storedVoiceName) voice = voices.find(v => v.name === storedVoiceName);
     if (!voice) voice = voices.find(v => v.lang === 'en-GB');
     this.setState({ voices, voice });
@@ -101,7 +113,7 @@ class Root extends Component {
     );
 
     ws.onopen = () => {
-      console.log("WebSocket connected");
+      console.log('WebSocket connected');
       this.setState({ connected: true });
       ws.send(JSON.stringify({ request: 'categories' }));
     };
@@ -115,15 +127,31 @@ class Root extends Component {
         case 'categories':
           this.setState({ categories: response.data });
           break;
-        case 'questions':
-          this.setState({ questions: response.data });
+        case 'session':
+          this.setState({
+            session: response.data.session,
+            questions: response.data.questions,
+            host: true
+          });
+          break;
+        case 'join':
+          if (response.session === this.state.session)
+            this.setState({
+              questions: response.data.questions,
+              players: this.state.players + 1,
+              joinOpen: false
+            });
+          break;
+        case 'ready':
+          if (response.session === this.state.session)
+            this.setState({ waiting: false });
           break;
       }
     };
   };
 
   handleGetQuestions = (amount, category, difficulty, type) => {
-    ws.send(JSON.stringify({ request: 'questions', amount, category, difficulty, type }));
+    ws.send(JSON.stringify({ request: 'session', amount, category, difficulty, type }));
   };
 
   handleThemeClick = event => this.setState({ themeAnchorEl: event.currentTarget });
@@ -134,28 +162,42 @@ class Root extends Component {
 
   handleVoiceClick = event => this.setState({ voiceAnchorEl: event.currentTarget });
 
-  handleVoiceClose = voice => this.setState({ voiceAnchorEl: null, voice: voice ? voice : this.state.voice }, () => {
-    localStorage.setItem('storedVoiceName', this.state.voice.name);
+  handleVoiceClose = voice => this.setState({
+    voiceAnchorEl: null, voice: voice ? voice : this.state.voice
+  }, () => {
+    this.state.voice && localStorage.setItem('storedVoiceName', this.state.voice.name);
   });
+
+  handleJoinOpen = () => this.setState({ joinOpen: true });
+
+  handleJoin = session => this.setState({ session }, () =>
+    ws.send(JSON.stringify({ request: 'join', session })));
+
+  handleReady = () =>
+    ws.send(JSON.stringify({ request: 'ready', session: this.state.session }));
 
   render() {
     const { setTheme } = this;
     const { classes, themes, theme } = this.props;
-    const { voiceAnchorEl, themeAnchorEl, voices, voice, connected, categories, questions } = this.state;
+    const { voiceAnchorEl, themeAnchorEl, voices, voice, connected, categories,
+      questions, session, joinOpen, host, players, waiting } = this.state;
 
     return (
       <div className={classes.root}>
         <Slide in>
           <div className={classes.buttons}>
             <Tooltip title="Voice">
-              <IconButton
-                className={classes.button}
-                aria-label="Voice"
-                aria-owns={voiceAnchorEl ? 'voice' : null}
-                aria-haspopup="true"
-                onClick={this.handleVoiceClick}>
-                <RecordVoiceOver className={classes.icon} />
-              </IconButton>
+              <div>
+                <IconButton
+                  className={classes.button}
+                  aria-label="Voice"
+                  aria-owns={voiceAnchorEl ? 'voice' : null}
+                  aria-haspopup="true"
+                  disabled={voices ? voices.length < 1 ? true : false : true}
+                  onClick={this.handleVoiceClick}>
+                  <RecordVoiceOver className={classes.icon} />
+                </IconButton>
+              </div>
             </Tooltip>
             <Tooltip title="Theme">
               <IconButton
@@ -202,28 +244,58 @@ class Root extends Component {
             themes={themes}
             theme={theme}
             voice={voice}
+            host={host}
+            players={players}
+            waiting={waiting}
+            handleReady={this.handleReady}
             questions={questions} />
-          : categories ?
-            <Categories
-              themes={themes}
-              theme={theme}
-              voice={voice}
-              categories={categories}
-              setTheme={setTheme}
-              handlePlay={this.handleGetQuestions} />
-            :
-            <div className={classes.center}>
-              <CircularProgress className={classes.progress} />
-              {connected ?
+          : joinOpen ?
+            <Join
+              handleCancel={() => this.setState({ joinOpen: false })}
+              handleJoin={this.handleJoin} />
+            : categories ?
+              <Categories
+                themes={themes}
+                theme={theme}
+                voice={voice}
+                categories={categories}
+                setTheme={setTheme}
+                handlePlay={this.handleGetQuestions} />
+              :
+              <div className={classes.center}>
+                <CircularProgress className={classes.progress} />
+                {connected ?
+                  <Typography variant="subtitle1">
+                    Loading data..
+                  </Typography>
+                  :
+                  <Typography variant="subtitle1">
+                    Attempting to connect..
+                  </Typography>
+                }
+              </div>
+        }
+
+        {!joinOpen &&
+          <Snackbar open anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+            <SnackbarContent
+              className={classes.session}
+              message={session ?
                 <Typography variant="subtitle1">
-                  Loading data..
+                  Session ID: {session}
                 </Typography>
                 :
                 <Typography variant="subtitle1">
-                  Attempting to connect..
+                  Join another game
                 </Typography>
               }
-            </div>
+              action={!session &&
+                <Button color="primary" align="center" onClick={this.handleJoinOpen}>
+                  Join
+                </Button>
+              }
+            />
+          </Snackbar>
         }
       </div>
     );

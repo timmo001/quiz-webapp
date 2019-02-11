@@ -17,10 +17,7 @@ import Slide from '@material-ui/core/Slide';
 const styles = theme => ({
   grid: {
     height: '100%',
-    paddingTop: theme.spacing.unit * 8,
-    paddingBottom: theme.spacing.unit * 2,
-    paddingLeft: theme.spacing.unit * 2,
-    paddingRight: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 2,
     overflow: 'auto'
   },
   card: {
@@ -42,21 +39,12 @@ const styles = theme => ({
   }
 });
 
-var speech;
 class Categories extends React.Component {
   state = {
     category: '',
     difficulty: '',
     type: '',
-    amount: 15
-  };
-
-  componentDidMount = () => {
-    speechSynthesis.cancel();
-    speech = new SpeechSynthesisUtterance();
-    if (this.props.voice) speech.voice = this.props.voice;
-    speech.text = 'Welcome!';
-    speechSynthesis.speak(speech);
+    amount: 5
   };
 
   handleChange = event => this.setState({ [event.target.name]: event.target.value });
@@ -76,8 +64,8 @@ class Categories extends React.Component {
         <Grid item lg={3} md={6} sm={6} xs={12}>
           <Slide in>
             <Card className={classes.card} elevation={2}>
-              <CardContent className={classes.cardContent}>
-                <Typography variant="headline" align="center">
+              <CardContent className={classes.cardContent} component="form">
+                <Typography variant="headline" align="center" gutterBottom>
                   Welcome!
                 </Typography>
 
@@ -174,7 +162,7 @@ class Categories extends React.Component {
             </Card>
           </Slide>
         </Grid>
-      </Grid >
+      </Grid>
     );
   }
 }
