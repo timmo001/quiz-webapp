@@ -232,7 +232,7 @@ build_app:
 # Preflight jobs
 hadolint:
   <<: *preflight
-  image: hadolint/hadolint:v1.16.0
+  image: hadolint/hadolint:v1.16.3
   before_script:
     - hadolint --version
   script:
