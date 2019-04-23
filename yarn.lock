@@ -933,10 +933,10 @@
     prop-types "^15.6.0"
     react-is "^16.6.3"
 
-"@mdi/font@3.4.93":
-  version "3.4.93"
-  resolved "https://registry.yarnpkg.com/@mdi/font/-/font-3.4.93.tgz#48f738c28aa49a5711811e03c59766a56844d119"
-  integrity sha512-iXNInmV6Xlmq8SA1zvYxp4uUA7/Z3cNgiK+Ps8UmHZNn1FLD6KDgeg0XE5RCraK+9qPWl8jsiBMpmbs+RFxI4Q==
+"@mdi/font@3.6.95":
+  version "3.6.95"
+  resolved "https://registry.yarnpkg.com/@mdi/font/-/font-3.6.95.tgz#0bbde766ca2d94cfa0e469f25523b23d3112bdd3"
+  integrity sha512-wUbkF/RRCIh51TPzAL9qUeRSUFla9I3x1nGq62HkfWzIebRHbDY5HPaYCQuZO7398dWaLHTu4BwnBA58YbhfEA==
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
